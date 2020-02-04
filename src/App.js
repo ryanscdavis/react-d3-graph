@@ -7,10 +7,12 @@ export default function () {
 
     const nodes = [
         {
-            id: 1
+            id: 1,
+            size: 1
         },
         {
-            id: 2
+            id: 2,
+            size: 2
         }
     ]
 

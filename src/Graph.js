@@ -31,16 +31,39 @@ const create = function (ref, nodes, links) {
     svg.selectAll('circle').data(nodes).enter().append('circle')
         .attr('cx', d => d.x)
         .attr('cy', d => d.y)
-        .attr('r', 50)
+        .attr('r', d => d.size * 20)
         .attr('fill', 'none')
         .attr('stroke', 'black')
         .attr('stroke-width', 5)
 
-    sim.on('tick', () => {
-        svg.selectAll('circle')
-            .attr('cx', d => d.x)
-            .attr('cy', d => d.y)
+    svg.selectAll('line').data(links).enter().append('line')
+        .attr('x1', d => d.source.x)
+        .attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x)
+        .attr('y2', d => d.target.y)
+        .style('stroke', 'black')
+        .style('stroke-width', 5)
+
+    sim.on('tick', () => onTick(svg, links))
+
+}
+
+const onTick = function (svg, links) {
+
+    links.forEach(link => {
+        link.angle = Math.atan2(link.target.y - link.source.y, link.target.x - link.source.x)
     })
+
+    svg.selectAll('circle')
+        .attr('cx', d => d.x)
+        .attr('cy', d => d.y)
+
+    svg.selectAll('line')
+        .attr('x1', d => d.source.x + d.source.size*20*Math.cos(d.angle))
+        .attr('y1', d => d.source.y + d.source.size*20*Math.sin(d.angle))
+        .attr('x2', d => d.target.x - d.target.size*20*Math.cos(d.angle))
+        .attr('y2', d => d.target.y - d.target.size*20*Math.sin(d.angle))
+        .style('stroke', 'black')
 
 }
 
