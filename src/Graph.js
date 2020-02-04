@@ -11,6 +11,12 @@ const create = function (ref, nodes, links) {
     const width = 1000
     const height = 1000
 
+    const minRad = 50
+    const maxRad = 70
+
+    const minSize = Math.min(...nodes.map(n => n.size))
+    const maxSize = Math.max(...nodes.map(n => n.size))
+
     const cx = 0.5 * width
     const cy = 0.5 * height
 
@@ -28,10 +34,14 @@ const create = function (ref, nodes, links) {
         .force('link', fLink)
         .force('center', fCenter)
 
+    const radScale = d3.scaleLinear().domain([0, maxSize]).range([0, maxRad])
+
+    nodes = nodes.map(n => Object.assign(n, { radius: radScale(n.size) }))
+
     svg.selectAll('circle').data(nodes).enter().append('circle')
         .attr('cx', d => d.x)
         .attr('cy', d => d.y)
-        .attr('r', d => d.size * 20)
+        .attr('r', d => d.radius)
         .attr('fill', 'none')
         .attr('stroke', 'black')
         .attr('stroke-width', 5)
@@ -59,10 +69,10 @@ const onTick = function (svg, links) {
         .attr('cy', d => d.y)
 
     svg.selectAll('line')
-        .attr('x1', d => d.source.x + d.source.size*20*Math.cos(d.angle))
-        .attr('y1', d => d.source.y + d.source.size*20*Math.sin(d.angle))
-        .attr('x2', d => d.target.x - d.target.size*20*Math.cos(d.angle))
-        .attr('y2', d => d.target.y - d.target.size*20*Math.sin(d.angle))
+        .attr('x1', d => d.source.x + d.source.radius*Math.cos(d.angle))
+        .attr('y1', d => d.source.y + d.source.radius*Math.sin(d.angle))
+        .attr('x2', d => d.target.x - d.target.radius*Math.cos(d.angle))
+        .attr('y2', d => d.target.y - d.target.radius*Math.sin(d.angle))
         .style('stroke', 'black')
 
 }

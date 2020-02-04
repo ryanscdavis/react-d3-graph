@@ -13,6 +13,10 @@ export default function () {
         {
             id: 2,
             size: 2
+        },
+        {
+            id: 3,
+            size: 3
         }
     ]
 
@@ -20,6 +24,14 @@ export default function () {
         {
             source: 1,
             target: 2
+        },
+        {
+            source: 1,
+            target: 3
+        },
+        {
+            source: 2,
+            target: 3
         }
     ]
 
