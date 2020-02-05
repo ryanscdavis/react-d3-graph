@@ -34,9 +34,9 @@ const create = function (ref, nodes, links) {
         .force('link', fLink)
         .force('center', fCenter)
 
-    const radScale = d3.scaleLinear().domain([0, maxSize]).range([0, maxRad])
+    const radScale = d3.scaleLinear().domain([0, Math.sqrt(maxSize)]).range([0, maxRad])
 
-    nodes = nodes.map(n => Object.assign(n, { radius: radScale(n.size) }))
+    nodes = nodes.map(n => Object.assign(n, { radius: radScale(Math.sqrt(n.size)) }))
 
     svg.selectAll('circle').data(nodes).enter().append('circle')
         .attr('cx', d => d.x)
