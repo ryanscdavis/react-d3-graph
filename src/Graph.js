@@ -19,6 +19,8 @@ const create = function (ref, nodes, links) {
 
     const cx = 0.5 * width
     const cy = 0.5 * height
+    const lineScale = 0.15
+    const lineColor = d3.color('rgb(50, 50, 50)')
 
     const svg = d3.select(ref.current)
         .style('width', width)
@@ -43,16 +45,17 @@ const create = function (ref, nodes, links) {
         .attr('cy', d => d.y)
         .attr('r', d => d.radius)
         .attr('fill', 'none')
-        .attr('stroke', 'black')
-        .attr('stroke-width', 5)
+        .attr('stroke', lineColor)
+        .attr('stroke-width', d => d.radius*lineScale)
 
     svg.selectAll('line').data(links).enter().append('line')
         .attr('x1', d => d.source.x)
         .attr('y1', d => d.source.y)
         .attr('x2', d => d.target.x)
         .attr('y2', d => d.target.y)
-        .style('stroke', 'black')
-        .style('stroke-width', 5)
+        .style('stroke', lineColor)
+        .attr('fill', 'none')
+        .attr('stroke-width', d => 0.5*(d.source.radius + d.target.radius)*lineScale)
 
     sim.on('tick', () => onTick(svg, links))
 
@@ -73,7 +76,6 @@ const onTick = function (svg, links) {
         .attr('y1', d => d.source.y + d.source.radius*Math.sin(d.angle))
         .attr('x2', d => d.target.x - d.target.radius*Math.cos(d.angle))
         .attr('y2', d => d.target.y - d.target.radius*Math.sin(d.angle))
-        .style('stroke', 'black')
 
 }
 
