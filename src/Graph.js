@@ -57,6 +57,13 @@ const create = function (ref, nodes, links) {
         .attr('fill', 'none')
         .attr('stroke-width', d => 0.5*(d.source.radius + d.target.radius)*lineScale)
 
+    svg.selectAll('text').data(nodes).enter().append('text')
+        .attr('x', d => d.x)
+        .attr('y', d => d.y)
+        .attr('text-anchor', 'middle')
+        .attr('alignment-baseline', 'middle')
+        .text(d => d.labelInside)
+
     sim.on('tick', () => onTick(svg, links))
 
 }
@@ -77,6 +84,9 @@ const onTick = function (svg, links) {
         .attr('x2', d => d.target.x - d.target.radius*Math.cos(d.angle))
         .attr('y2', d => d.target.y - d.target.radius*Math.sin(d.angle))
 
+    svg.selectAll('text')
+        .attr('x', d => d.x)
+        .attr('y', d => d.y)
 }
 
 export default function (props) {

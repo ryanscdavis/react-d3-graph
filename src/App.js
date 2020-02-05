@@ -8,15 +8,18 @@ export default function () {
     const nodes = [
         {
             id: 1,
-            size: 1
+            size: 1,
+            labelInside: 'A'
         },
         {
             id: 2,
-            size: 2
+            size: 2,
+            labelInside: 'B'
         },
         {
             id: 3,
-            size: 3
+            size: 3,
+            labelInside: 'C'
         }
     ]
 
