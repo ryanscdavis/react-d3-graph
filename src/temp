@@ -1,0 +1,35 @@
+def topNCompetitors(numCompetitors, topNCompetitors, competitors,
+                    numReviews, reviews):
+
+    # use a map to tally the number of mentions
+    tally = {}
+
+    # use lowercase
+    comps = [c.lower() for c in competitors]
+
+    for c in comps:
+        tally[c] = 0
+
+    for review in reviews:
+        mentioned = []
+        for word in review.split(' '):
+            w = word.lower()
+            w = w.replace(';','')
+            w = w.replace('.','')
+            if w in comps and w not in mentioned:
+                tally[w] += 1
+                mentioned.append(w)
+
+    ranking = sorted(tally.items(), key = lambda x: x[1])
+    ranking.reverse()
+
+    topN = []
+
+    for i,item in enumerate(ranking):
+        if topNCompetitors > len(comps) and item[1] > 0:
+            topN.append(item[0])
+        elif i < topNCompetitors:
+            topN.append(item[0])
+
+
+    return topN

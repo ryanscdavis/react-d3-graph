@@ -8,11 +8,11 @@ const create = function (ref, nodes, links) {
 
     console.log('create')
 
-    const width = 1000
-    const height = 1000
+    const width = 1400
+    const height = 1200
 
     const minRad = 50
-    const maxRad = 50
+    const maxRad = 25
 
     const minSize = Math.min(...nodes.map(n => n.size))
     const maxSize = Math.max(...nodes.map(n => n.size))
@@ -22,10 +22,10 @@ const create = function (ref, nodes, links) {
     const lineScale = 0.15
     const lineColor = d3.color('rgb(50, 50, 50)')
 
-    const markerBoxWidth = 3
-    const markerBoxHeight = 3
+    const markerWidth = 3
+    const markerHeight = 3
 
-    const arrowPoints = [[0, 0], [0, markerBoxHeight], [markerBoxWidth, 0.5*markerBoxHeight], [0,0]];
+    const arrowPoints = [[0, 0], [0, markerHeight], [markerWidth, 0.5*markerHeight], [0,0]];
 
     const radScale = d3.scaleLinear().domain([0, Math.sqrt(maxSize)]).range([0, maxRad])
     nodes = nodes.map(n => Object.assign(n, { radius: radScale(Math.sqrt(n.size)) }))
@@ -35,7 +35,7 @@ const create = function (ref, nodes, links) {
         .style('height', height)
 
     const fCharge   = d3.forceManyBody().strength(-300)
-    const fLink     = d3.forceLink(links).distance(d => 3*0.5*(d.source.radius + d.target.radius)).strength(1).id(d => d.id)
+    const fLink     = d3.forceLink(links).distance(d => 1.5*(d.source.radius + d.target.radius)).strength(1).id(d => d.id)
     const fCenter   = d3.forceCenter(cx, cy)
 
     const sim = d3.forceSimulation()
@@ -55,17 +55,19 @@ const create = function (ref, nodes, links) {
         .append('defs')
         .append('marker')
             .attr('id', 'arrow')
-            .attr('viewBox', [0, 0, markerBoxWidth, markerBoxHeight])
-            .attr('refX', 0.9*markerBoxWidth)
-            .attr('refY', 0.5*markerBoxHeight)
-            .attr('markerWidth', markerBoxWidth)
-            .attr('markerHeight', markerBoxHeight)
+            .attr('viewBox', [0, 0, markerWidth, markerHeight])
+            .attr('refX', 0.9*markerWidth)
+            .attr('refY', 0.5*markerHeight)
+            .attr('markerWidth', markerWidth)
+            .attr('markerHeight', markerHeight)
             .attr('orient', 'auto-start-reverse')
         .append('path')
             .attr('d', d3.line()(arrowPoints))
             .attr('stroke-width', 0)
             .attr('fill', lineColor)
 
+    let markerEnd = ''
+    if (false) markerEnd = 'url(#arrow)'
 
     svg.selectAll('circle').data(nodes).enter().append('circle')
         .attr('r', d => d.radius)
@@ -78,7 +80,7 @@ const create = function (ref, nodes, links) {
         .style('stroke', lineColor)
         .attr('fill', 'none')
         .attr('stroke-width', d => 0.5*(d.source.radius + d.target.radius)*lineScale)
-        .attr('marker-end', 'url(#arrow)')
+        .attr('marker-end', markerEnd)
 
     svg.selectAll('text').data(nodes).enter().append('text')
         .attr('text-anchor', 'middle')

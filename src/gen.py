@@ -27,6 +27,7 @@ def write_graph(G):
         f.write(json_str)
 
 
-G = nx.fast_gnp_random_graph(15, 0.15)
-
+G = nx.fast_gnp_random_graph(26, 0.09)
+# G = nx.dorogovtsev_goltsev_mendes_graph(2)
+# G = nx.complete_graph(15)
 write_graph(G)

@@ -1,7 +1,7 @@
 
 import React from 'react'
 import Graph from './Graph'
-import Data from './pagerank_0.15_directed.json'
+import Data from './pagerank.json'
 import './App.css'
 
 export default function () {

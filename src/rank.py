@@ -45,24 +45,18 @@ def write_graph(filename, G, rank):
         f.write(json_str)
 
 
-G = read_graph()
 
 
-alpha = [0.85, 0.50, 0.15]
+G = read_graph(directed=False)
 
-for a in alpha:
+alpha = 0.95
 
-    pr = nx.pagerank(G, alpha=a)
-    write_graph(f'pagerank_{str(a)}.json', G, pr)
+personalization = { n: 0 for n in G.nodes }
+personalization[10] = 1
 
+print(personalization)
 
-G = read_graph(directed=True)
-
-alpha = [0.85, 0.50, 0.15]
-
-for a in alpha:
-
-    pr = nx.pagerank(G, alpha=a)
-    write_graph(f'pagerank_{str(a)}_directed.json', G, pr)
+pr = nx.pagerank(G, alpha=alpha, max_iter=500)
+write_graph(f'pagerank.json', G, pr)
 
 
